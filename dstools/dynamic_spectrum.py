@@ -474,6 +474,48 @@ class DynamicSpectrum:
 
         return fig, ax
 
+    def plot_pol_ds(self, cmax=20):
+
+        Idata = self.data['I'].real
+        Vdata = self.data['V'].real
+
+        rms = np.nanstd(self.data['V'].imag) / 40
+        data = Vdata / Idata
+        data[Idata < 3*rms] = np.nan
+
+        tmin, tmax = (-0.5, 0.5) if self.fold else (self.tmin, self.tmax)
+        norm = ImageNormalize(data, interval=ZScaleInterval(contrast=0.2))
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        im = ax.imshow(
+            np.transpose(data),
+            extent=[tmin, tmax, self.fmin, self.fmax],
+            aspect='auto',
+            origin='lower',
+            norm=norm,
+            clim=(-1, 1),
+            cmap='coolwarm',
+        )
+        cb = fig.colorbar(im, ax=ax, fraction=0.05, pad=0.02)
+        cb.set_label('Fractional Circular Polarisation')
+
+        xlabel = 'Phase' if self.fold else 'Time (hours)'
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel('Frequency (MHz)')
+
+        # if self.save:
+        #     data.dump(f'{self.ds_path}/{self.src.lower()}_{stokes.lower()}_ds.npy')
+
+        #     path_template = '{}/{}_stokes{}_subbed_ds_favg{}-tavg{}.png'
+        #     fig.savefig(
+        #         path_template.format(self.ds_path, self.src.lower(), stokes.lower(), self.favg, self.tavg),
+        #         bbox_inches='tight',
+        #         format='png',
+        #         dpi=300,
+        #     )
+
+        return fig, ax
+
     def plot_acf(self, stokes='I', contrast=0.4):
 
         # Compute auto-correlation and select upper-right quadrant

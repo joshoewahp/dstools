@@ -25,6 +25,8 @@ logger = logging.getLogger(__name__)
               help='Stokes parameters that will be included in each plot.')
 @click.option('-d', '--dspec', is_flag=True, default=False,
               help='Plot dynamic spectrum.')
+@click.option('-c', '--pol_dspec', is_flag=True, default=False,
+              help='Plot fractional polarisation dynamic spectrum.')
 @click.option('-l', '--lightcurve', is_flag=True, default=False,
               help='Plot channel-averaged lightcurve.')
 @click.option('-p', '--spectrum', is_flag=True, default=False,
@@ -61,6 +63,7 @@ def main(
     imag,
     stokes,
     dspec,
+    pol_dspec,
     lightcurve,
     spectrum,
     crosspols,
@@ -110,6 +113,9 @@ def main(
                 ds.plot_ds(stokes=s, cmax=cmax[s])
             if imag:
                 ds.plot_ds(stokes=s, cmax=cmax[s], imag=True)
+
+    if pol_dspec:
+        ds.plot_pol_ds(cmax=cmax['I'])
 
     # Cross-polarisations sqrt(U^2 + V^2)
     if crosspols:
