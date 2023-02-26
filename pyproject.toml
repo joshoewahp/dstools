@@ -23,6 +23,7 @@ dstools-rotate = "dstools.cli.fix_phasecentre:main"
 dstools-avg-baselines = "dstools.cli.avg_baselines:main"
 dstools-make-dspec = "dstools.cli.make_dspec:main"
 dstools-plot-dspec = "dstools.cli.plot_dspec:main"
+dstools-forecast-pulse = "dstools.cli.forecast_pulse:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
